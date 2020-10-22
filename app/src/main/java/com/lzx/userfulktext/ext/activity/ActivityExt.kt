@@ -3,6 +3,7 @@ package com.lzx.userfulktext.ext.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import java.io.Serializable
@@ -87,4 +88,22 @@ private fun fillIntentArguments(intent: Intent, params: Array<out Pair<String, A
         }
         return@forEach
     }
+}
+
+fun Context?.isContextValid(): Boolean {
+    if (this == null) return false
+    if (this !is Activity) {
+        return false
+    }
+    return this.isActivityValid()
+}
+
+fun Activity.isActivityValid(): Boolean {
+    if (this.isFinishing) {
+        return false
+    }
+    if (Build.VERSION.SDK_INT >= 17) {
+        return !this.isDestroyed
+    }
+    return true
 }

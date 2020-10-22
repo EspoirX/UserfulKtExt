@@ -39,4 +39,16 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    implementation 'com.github.yyued:SVGAPlayer-Android:2.5.13'
+    // 手Y SVGA管理
+    api('com.github.YvesCheung:SVGAGlidePlugin:4.9.2') {
+        exclude group: 'com.github.yyued', module: 'SVGAPlayer-Android'
+    }
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
 }
