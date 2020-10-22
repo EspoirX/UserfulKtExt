@@ -11,9 +11,15 @@ import java.io.Serializable
 /**
  * Activity 相关
  *
- *       navigationTo<UserInfoActivity>(
- *           "userId" to 1,
- *          "userName" to "ABC")
+ * 不带参数的界面转跳：
+ *    navigationTo<UserInfoActivity>()
+ *
+ * 带参数的界面转跳：
+ *   navigationTo<UserInfoActivity>("userId" to "123","nickname" to "Tom")
+ *
+ * 需要 ForResult 的使用 navigationToForResult
+ *
+ * finish 时需要 setResult 的使用 finishForResult
  */
 inline fun <reified T : Activity> Context.navigationTo(vararg params: Pair<String, Any?>) =
     internalStartActivity(this, T::class.java, params)
@@ -24,7 +30,10 @@ inline fun <reified T : Activity> Activity.navigationTo(vararg params: Pair<Stri
 inline fun <reified T : Activity> androidx.fragment.app.Fragment.navigationTo(vararg params: Pair<String, Any?>) =
     context?.let { internalStartActivity(it, T::class.java, params) }
 
-inline fun <reified T : Activity> Activity.navigationToForResult(requestCode: Int, vararg params: Pair<String, Any?>) =
+inline fun <reified T : Activity> Activity.navigationToForResult(
+    requestCode: Int,
+    vararg params: Pair<String, Any?>
+) =
     internalStartActivityForResult(this, T::class.java, requestCode, params)
 
 fun Activity.finishForResult(vararg params: Pair<String, Any?>) {
@@ -49,7 +58,11 @@ fun internalStartActivityForResult(
     act.startActivityForResult(createIntent(act, activity, params), requestCode)
 }
 
-fun <T> createIntent(ctx: Context? = null, clazz: Class<out T>? = null, params: Array<out Pair<String, Any?>>): Intent {
+fun <T> createIntent(
+    ctx: Context? = null,
+    clazz: Class<out T>? = null,
+    params: Array<out Pair<String, Any?>>
+): Intent {
     val intent = if (clazz == null) Intent() else Intent(ctx, clazz)
     if (params.isNotEmpty()) fillIntentArguments(intent, params)
     return intent
@@ -90,6 +103,9 @@ private fun fillIntentArguments(intent: Intent, params: Array<out Pair<String, A
     }
 }
 
+/**
+ * 检查上下文是否可用
+ */
 fun Context?.isContextValid(): Boolean {
     if (this == null) return false
     if (this !is Activity) {
